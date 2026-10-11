@@ -14,14 +14,15 @@ projects/
 
 `RSI_locomanip` is used only as the temporary Python environment source. Its documentation, environment-variable files, research code, results, and ideas are not part of this repository.
 
-## Verified versions
+## Dependency versions
 
-| Dependency | Verified version |
+| Dependency | Version |
 |---|---:|
 | Python | 3.9.6 |
 | MuJoCo | 3.3.7 |
 | NumPy | 2.0.2 |
 | pytest | 8.4.2 |
+| PyTorch | 2.7.1 |
 
 ## Option A: link the existing RSI_locomanip environment
 
@@ -49,8 +50,15 @@ cd /path/to/Agent-G1
 python3.9 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-python -m pip install "mujoco==3.3.7" "numpy==2.0.2" "pytest==8.4.2"
+python -m pip install -r requirements.txt
 ```
+
+The G1 locomotion adapter uses its NumPy implementation by default and does not
+import PyTorch for that path. PyTorch is included for the optional TorchScript
+backend and for users who want to compare the two inference implementations.
+The currently linked `RSI_locomanip` environment does not have PyTorch
+installed; installing `requirements.txt` into a standalone environment provides
+both backends.
 
 ## Environment check and model tests
 
