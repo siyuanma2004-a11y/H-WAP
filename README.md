@@ -22,3 +22,7 @@ position convergence.
 See [ENVIRONMENT.md](ENVIRONMENT.md) for the temporary linked-environment
 setup, standalone installation instructions, verified dependency versions, and
 the combined environment/test command.
+
+## Reproducible experiment framework
+
+See [EXPERIMENT_FRAMEWORK.md](EXPERIMENT_FRAMEWORK.md) for the train environment, action chunks, direct/Oracle runs, replay, camera-conditioned dataset export and the experimental SONIC adapter.

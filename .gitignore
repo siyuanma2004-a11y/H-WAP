@@ -1,0 +1,16 @@
+.venv/
+.setup/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.DS_Store
+._*
+.env
+.env.*
+.runtime/
+.venv_sonic/
+.deps/
+third_party/
+runs/
+datasets/
+models/sonic_v1_1/
