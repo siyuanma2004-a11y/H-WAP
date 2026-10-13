@@ -167,7 +167,7 @@ class HumanoidEnvironment:
                 "head_torso_reference":self.controller.supports_head,"velocity":self.controller.supports_velocity,
                 "waist_height":self.controller.supports_waist},
                 "instruction": "Touch the green marker with your right palm" if self.task == "reach" else "Move the blue cube onto the green marker",
-                "robot": robot, "images": self.render() if render else {}}
+                "robot": robot, "cameras":self.camera_parameters(), "images": self.render() if render else {}}
 
     def camera_parameters(self):
         result = {}

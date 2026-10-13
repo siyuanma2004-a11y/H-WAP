@@ -1,0 +1,125 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "enum": [
+        1
+      ]
+    },
+    "name": {
+      "type": "string"
+    },
+    "frame": {
+      "type": "string",
+      "enum": [
+        "world"
+      ]
+    },
+    "keyframes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "t": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 3
+          },
+          "right_wrist": {
+            "type": "object",
+            "properties": {
+              "position": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "quaternion": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "position",
+              "quaternion"
+            ],
+            "additionalProperties": false
+          },
+          "left_wrist": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "position": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  "quaternion": {
+                    "type": "null"
+                  }
+                },
+                "required": [
+                  "position",
+                  "quaternion"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "velocity": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "enum": [
+                0
+              ]
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "left_hand": {
+            "type": "null"
+          },
+          "right_hand": {
+            "type": "null"
+          },
+          "head": {
+            "type": "null"
+          },
+          "waist_height": {
+            "type": "null"
+          }
+        },
+        "required": [
+          "t",
+          "right_wrist",
+          "left_wrist",
+          "velocity",
+          "left_hand",
+          "right_hand",
+          "head",
+          "waist_height"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 2,
+      "maxItems": 4
+    }
+  },
+  "required": [
+    "schema_version",
+    "name",
+    "frame",
+    "keyframes"
+  ],
+  "additionalProperties": false
+}

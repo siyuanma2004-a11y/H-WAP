@@ -57,6 +57,8 @@ def run(args):
                 error = f"{type(exc).__name__}: {exc}"
             result = recorder.finish({"method":args.method,"agent":agent.name,"llm_calls":agent.calls,
                 "llm_tokens":agent.tokens,"world_model_calls":imagination_calls,"searches":searches,"run_error":error,
+                "agent_model":getattr(agent,"model",None),"agent_provider":getattr(agent,"provider",None),
+                "agent_history":getattr(agent,"history",[]),
                 "critic":"privileged_geometric_reference" if args.method == "oracle" else None})
             row = {"seed":seed,"task":args.task,"method":args.method,"backend":env.controller.backend_name,"agent":agent.name,
                 **result["metrics"],"wall_time_s":result["wall_time_s"],"llm_calls":agent.calls,
