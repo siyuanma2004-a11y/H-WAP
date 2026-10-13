@@ -58,11 +58,22 @@ def extract_inputs(messages,directory):
     return texts,images
 
 
-def cli_command(codex,directory,schema,images,model=MODEL,reasoning='low'):
+def cli_command(codex,directory,schema,images,model=MODEL,reasoning='low',transport='http'):
+    if model!=MODEL or transport not in ('http','auto'):
+        raise ValueError('unsupported model or transport')
     cmd=[codex,'--no-daemon','-a','never','exec','--ephemeral','--ignore-user-config',
         '--skip-git-repo-check','--sandbox','read-only','--model',model,
         '-c',f'model_reasoning_effort="{reasoning}"','-c','web_search="disabled"',
         '-c','features.skip_host_skill_discovery=true']
+    if transport=='http':
+        # A custom provider avoids overriding reserved built-in IDs. The CLI
+        # handles its normal cached OpenAI/ChatGPT auth; no base URL or token is set.
+        for setting in ('model_provider="hwap_chatgpt_http"',
+                'model_providers.hwap_chatgpt_http.name="H-WAP ChatGPT HTTP"',
+                'model_providers.hwap_chatgpt_http.requires_openai_auth=true',
+                'model_providers.hwap_chatgpt_http.wire_api="responses"',
+                'model_providers.hwap_chatgpt_http.supports_websockets=false'):
+            cmd+=['-c',setting]
     for feature in DISABLED_FEATURES:cmd+=['-c',f'features.{feature}=false']
     cmd+=['--output-schema',str(schema),'--output-last-message',str(directory/'response.json'),'--json']
     for image in images:cmd+=['--image',str(image)]
@@ -95,6 +106,7 @@ class Backend:
         if len(self.token)<32:raise ValueError('bridge token must have at least 32 characters')
         self.logs=Path(args.log_dir).resolve();self.logs.mkdir(parents=True,exist_ok=True)
         self.timeout,self.reasoning=args.timeout_s,args.reasoning
+        self.transport=getattr(args,'transport','http')
         self.lock=threading.Lock()
         self.calls=0
 
@@ -110,7 +122,7 @@ class Backend:
                 'Generate one simulated robot command that satisfies the output schema. '
                 'No hidden object/goal coordinates are available. The images are ordered as the Camera labels in the text.\n\n'+'\n\n'.join(texts))
             (directory/'prompt.txt').write_text(prompt)
-            command=cli_command(self.codex,directory,self.schema,images,reasoning=self.reasoning)
+            command=cli_command(self.codex,directory,self.schema,images,reasoning=self.reasoning,transport=self.transport)
             started=time.monotonic()
             env=os.environ.copy()
             for name in ('OPENAI_API_KEY','CODEX_API_KEY'):env.pop(name,None)
@@ -133,6 +145,10 @@ class Backend:
             metadata={'model':MODEL,'reasoning_effort':self.reasoning,'elapsed_s':elapsed,'tool_calls':0,
                 'image_count':len(images),'image_sha256':[hashlib.sha256(p.read_bytes()).hexdigest() for p in images],
                 'usage':usage,'local_call_id':directory.name,'transport':'codex_exec_chatgpt'}
+            metadata.update({'responses_transport':self.transport,
+                'model_provider':'hwap_chatgpt_http' if self.transport=='http' else 'openai',
+                'bridge_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+                'schema_sha256':hashlib.sha256(self.schema.read_bytes()).hexdigest()})
             (directory/'call.json').write_text(json.dumps(metadata,indent=2)+'\n')
             print(json.dumps({'call':directory.name,'model':MODEL,'seconds':round(elapsed,2),'images':len(images)}),flush=True)
             prompt_tokens=int(usage.get('input_tokens',0));completion_tokens=int(usage.get('output_tokens',0))
@@ -176,6 +192,7 @@ def main():
     parser.add_argument('--log-dir',default='runs/codex_bridge')
     parser.add_argument('--timeout-s',type=float,default=180)
     parser.add_argument('--reasoning',choices=['low','medium','high'],default='low')
+    parser.add_argument('--transport',choices=['http','auto'],default='http')
     args=parser.parse_args();backend=Backend(args)
     server=ThreadingHTTPServer(('127.0.0.1',args.port),make_handler(backend))
     print(json.dumps({'status':'ready','listen':f'127.0.0.1:{args.port}','model':MODEL}),flush=True)

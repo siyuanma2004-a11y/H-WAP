@@ -23,6 +23,7 @@ def main():
     parser.add_argument('--max-chunks',type=int,default=2)
     parser.add_argument('--budget-s',type=float,default=5)
     parser.add_argument('--reasoning',choices=['low','medium','high'],default='low')
+    parser.add_argument('--transport',choices=['http','auto'],default='http')
     args=parser.parse_args()
     if not 1<=args.max_chunks<=4 or not 0<args.budget_s<=12:parser.error('smoke test needs 1–4 chunks and at most 12 simulation seconds')
     root=Path(__file__).resolve().parents[1]
@@ -33,7 +34,7 @@ def main():
         token.write_text(secrets.token_urlsafe(36));os.chmod(token,0o600)
         remote_token='.setup/codex-bridge-'+secrets.token_hex(8)+'.token'
         backend=Backend(SimpleNamespace(codex='codex',schema=root/'configs/action_chunk.schema.json',token_file=token,
-            log_dir=root/'runs/codex_bridge',timeout_s=180,reasoning=args.reasoning))
+            log_dir=root/'runs/codex_bridge',timeout_s=180,reasoning=args.reasoning,transport=args.transport))
         server=ThreadingHTTPServer(('127.0.0.1',18561),make_handler(backend))
         thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
         try:

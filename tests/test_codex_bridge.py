@@ -26,6 +26,9 @@ def test_model_invocation_is_pinned_ephemeral_and_read_only(tmp_path):
     assert command[command.index('--sandbox')+1]=='read-only'
     assert 'features.shell_tool=false' in command and 'features.multi_agent=false' in command
     assert command[-1]=='-'
+    assert 'model_provider="hwap_chatgpt_http"' in command
+    assert 'model_providers.hwap_chatgpt_http.supports_websockets=false' in command
+    assert not any('base_url=' in arg for arg in command)
     assert not any('auth.json' in arg for arg in command)
 
 
