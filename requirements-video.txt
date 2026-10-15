@@ -1,0 +1,2 @@
+# Optional ffmpeg executable for recorded-video export.
+imageio-ffmpeg==0.6.0

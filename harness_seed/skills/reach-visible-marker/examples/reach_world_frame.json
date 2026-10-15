@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "name": "reach_green_marker",
+  "frame": "world",
+  "keyframes": [
+    {
+      "t": 0.0,
+      "right_wrist": {
+        "position": [
+          -0.003,
+          -0.23,
+          0.615
+        ],
+        "quaternion": null
+      }
+    },
+    {
+      "t": 1.5,
+      "right_wrist": {
+        "position": [
+          0.305,
+          -0.26,
+          1.049
+        ],
+        "quaternion": null
+      }
+    },
+    {
+      "t": 2.5,
+      "right_wrist": {
+        "position": [
+          0.305,
+          -0.26,
+          1.049
+        ],
+        "quaternion": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "name": "harness_smoke_oracle",
+  "tasks": ["reach"],
+  "seeds": [0, 4],
+  "views": ["ego", "workspace"],
+  "backend": "unitree",
+  "budget_s": 10,
+  "width": 160,
+  "height": 120,
+  "planner": {"kind": "calibration"},
+  "critic": {"kind": "privileged"},
+  "world_model": {"kind": "oracle", "perturb_m": 0.01},
+  "store": {"seed": "../../harness_seed"},
+  "harness": {"max_chunks": 2, "refine_rounds": 1, "local_search": 3, "samples": 2, "use_memory": true, "use_skills": true}
+}

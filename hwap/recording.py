@@ -2,6 +2,7 @@
 import json
 from pathlib import Path
 import subprocess
+import sys
 import time
 import numpy as np
 from .images import png_bytes
@@ -28,7 +29,10 @@ class EpisodeRecorder:
                          "backend": env.controller.backend_name, "git_commit": commit, "goal": env.goal.tolist(),
                          "control_backend":env.backend,"sonic_model_dir":None if env.sonic_model_dir is None else str(env.sonic_model_dir),
                          "budget_s": env.budget_s, "physics_dt": float(env.sim.model.opt.timestep), "control_dt": 0.02,
-                         "initial_qpos": self.initial_qpos.tolist(), "initial_qvel": self.initial_qvel.tolist()}
+                         "initial_qpos": self.initial_qpos.tolist(), "initial_qvel": self.initial_qvel.tolist(),
+                         "environment": {"python": sys.version.split()[0], "numpy": np.__version__}}
+        import mujoco
+        self.metadata["environment"]["mujoco"] = mujoco.__version__
         self.metadata["robot_body_ids"] = env.robot_body_ids.tolist()
         self.metadata["source_sha256"] = source_hashes()
         self.metadata["sonic_model_revision"] = getattr(env.controller,"model_revision",None)

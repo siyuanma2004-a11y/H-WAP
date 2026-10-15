@@ -1,0 +1,12 @@
+{
+  "schema_version": 2,
+  "name": "wap_port",
+  "tasks": ["reach"],
+  "seeds": [10, 11, 12],
+  "views": ["ego", "workspace"],
+  "budget_s": 15,
+  "planner": {"kind": "llm", "llm_config": "../agent.anthropic.example.json"},
+  "critic": {"kind": "vlm"},
+  "world_model": {"kind": "oracle"},
+  "harness": {"max_chunks": 5, "refine_rounds": 2, "local_search": 4, "gaze": "fixed", "use_memory": false, "use_skills": false}
+}

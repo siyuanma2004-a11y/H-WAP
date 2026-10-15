@@ -93,7 +93,33 @@
             "type": "null"
           },
           "head": {
-            "type": "null"
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "description": "Orientation-only torso gaze: world/heading-frame torso_link quaternion [w,x,y,z]; position must be null on the Unitree backend.",
+                "properties": {
+                  "position": {
+                    "type": "null"
+                  },
+                  "quaternion": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 4,
+                    "maxItems": 4
+                  }
+                },
+                "required": [
+                  "position",
+                  "quaternion"
+                ],
+                "additionalProperties": false
+              }
+            ]
           },
           "waist_height": {
             "type": "null"

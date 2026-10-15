@@ -1,0 +1,12 @@
+{
+  "schema_version": 2,
+  "name": "direct_llm",
+  "tasks": ["reach"],
+  "seeds": [10, 11, 12],
+  "views": ["ego"],
+  "budget_s": 15,
+  "planner": {"kind": "llm", "llm_config": "../agent.anthropic.example.json"},
+  "critic": {"kind": "none"},
+  "world_model": {"kind": "none"},
+  "harness": {"max_chunks": 5, "gaze": "llm", "use_memory": false, "use_skills": false}
+}

@@ -1,0 +1,5 @@
+- Write short command chunks (1-3 s, 2-8 keyframes); times are multiples of 0.002 s.
+- Start every used field at the measured value in the first keyframe, then move.
+- Prefer frame=world for stationary reaching; use heading_at_start when the base moves.
+- Check observation.capabilities before using head, waist_height or velocity.
+- After each chunk, compare where the palm actually went with what you intended and correct the next chunk.

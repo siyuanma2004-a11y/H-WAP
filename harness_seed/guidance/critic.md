@@ -1,0 +1,4 @@
+- Judge the imagined rollout only from its images and the public robot state.
+- Reject plans that touch the table, leave the 0.55-1.55 m wrist height range, or end with the palm visibly off the target.
+- When rejecting, give one concrete edit (which keyframe, which axis, how many centimetres).
+- If the difference between candidates is not visible from the given views, say so instead of guessing.

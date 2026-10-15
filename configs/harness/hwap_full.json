@@ -1,0 +1,15 @@
+{
+  "schema_version": 2,
+  "name": "hwap_full",
+  "tasks": ["reach"],
+  "seeds": [10, 11, 12],
+  "views": ["ego", "workspace"],
+  "budget_s": 15,
+  "planner": {"kind": "llm", "llm_config": "../agent.anthropic.example.json"},
+  "critic": {"kind": "vlm"},
+  "world_model": {"kind": "oracle", "perturb_m": 0.01},
+  "store": {"seed": "../../harness_seed"},
+  "harness": {"max_chunks": 5, "refine_rounds": 2, "local_search": 4, "samples": 2, "gaze": "llm",
+              "use_memory": true, "use_skills": true, "reflect": true, "gate": "test"},
+  "reflection": {"enabled": true, "regression_set": ["reach:100", "reach:101"]}
+}

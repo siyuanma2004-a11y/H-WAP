@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "name": "reach_smoke",
+  "task": "reach",
+  "methods": ["direct", "oracle"],
+  "seeds": [0, 4, 29],
+  "views": ["ego", "workspace"],
+  "backend": "unitree",
+  "budget_s": 5,
+  "max_chunks": 2,
+  "agent": "calibration",
+  "verify_replay": true
+}

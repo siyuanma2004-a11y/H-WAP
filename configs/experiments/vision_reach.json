@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "name": "visual_reach",
+  "task": "reach",
+  "methods": ["direct", "oracle"],
+  "seeds": [10, 11, 12],
+  "views": ["ego"],
+  "backend": "unitree",
+  "budget_s": 12,
+  "max_chunks": 4,
+  "agent": "vision",
+  "agent_config": "../agent.example.json",
+  "verify_replay": true
+}

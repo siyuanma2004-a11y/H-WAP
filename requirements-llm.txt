@@ -1,0 +1,2 @@
+# Optional Claude API planner/critic/reflection client (hwap/llm.py).
+anthropic==1.12.0

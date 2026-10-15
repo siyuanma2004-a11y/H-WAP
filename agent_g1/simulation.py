@@ -25,8 +25,8 @@ def yaw_from_quaternion(quaternion: np.ndarray) -> float:
 class G1Simulation:
     """Small named-entity wrapper around the G1 table scene."""
 
-    def __init__(self, scene_path: Path = SCENE_PATH) -> None:
-        self.model = self._load_model(scene_path)
+    def __init__(self, scene_path: Path = SCENE_PATH, spec_hook=None) -> None:
+        self.model = self._load_model(scene_path, spec_hook)
         self.data = mujoco.MjData(self.model)
         self.pelvis_body_id = self._required_id(
             mujoco.mjtObj.mjOBJ_BODY, "pelvis"
@@ -39,9 +39,11 @@ class G1Simulation:
         )
 
     @staticmethod
-    def _load_model(scene_path: Path = SCENE_PATH) -> mujoco.MjModel:
-        """Compile the scene and attach Cartesian palm references."""
+    def _load_model(scene_path: Path = SCENE_PATH, spec_hook=None) -> mujoco.MjModel:
+        """Compile the scene, attach palm references and optional task props."""
         spec = mujoco.MjSpec.from_file(str(scene_path))
+        if spec_hook is not None:
+            spec_hook(spec)
         for side in ("left", "right"):
             wrist = spec.body(f"{side}_wrist_yaw_link")
             wrist.add_site(

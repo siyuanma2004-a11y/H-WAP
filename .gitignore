@@ -14,3 +14,4 @@ third_party/
 runs/
 datasets/
 models/sonic_v1_1/
+configs/agent.local*.json

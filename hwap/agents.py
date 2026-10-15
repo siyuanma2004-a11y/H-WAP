@@ -42,8 +42,10 @@ class VisionChatAgent:
             "quaternion=[w,x,y,z]. Pose XY is relative to the base at chunk start; Z is above the floor. "
             "Initialize every used field in the first keyframe. velocity=[vx,vy,yaw_rate] is in the "
             "current robot heading frame; limits are [0.15,0.10,0.30]. Hands are closure amounts 0..1. "
-            "The current baseline has no independent neck or waist-height control: omit head and "
-            "waist_height. Obey observation.capabilities: use zero velocity if velocity is false. "
+            "G1 has no neck: head is the torso orientation that carries the ego camera. When "
+            "observation.capabilities.gaze is present you may set head={position:null, quaternion:[w,x,y,z]} "
+            "within its limits (positive pitch looks down); omit head otherwise. Omit waist_height unless "
+            "capabilities.waist_height is true. Obey observation.capabilities: use zero velocity if velocity is false. "
             "Use short conservative motions and the images plus measured robot state."
         )
         if config.get("prompt_profile") == "reach_stationary_world":

@@ -1,0 +1,3 @@
+# CPU simulation and NumPy locomotion; no CUDA or model API is needed.
+mujoco==3.3.7
+numpy==2.0.2

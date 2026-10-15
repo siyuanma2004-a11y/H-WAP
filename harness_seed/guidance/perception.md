@@ -1,0 +1,3 @@
+- Look before planning when the target is missing, partly hidden, or its depth is ambiguous.
+- State the question a new view should answer, then choose the cheapest view change that can answer it.
+- Arms can occlude the egocentric camera near the end of a reach; check the workspace view if available.

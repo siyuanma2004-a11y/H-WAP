@@ -2,6 +2,10 @@
 
 Configured on train at `/home/train/H-WAP`, 2026-10-13.
 
+For a fresh local checkout, use `bash scripts/setup_env.sh` and the commands in
+[README.md](README.md). The local starter scripts do not require the train
+server, its SSH alias, or the previous Mac virtual environment.
+
 ## Start and reproduce
 
 ```bash
@@ -57,7 +61,11 @@ Copy `configs/agent.example.json` to a configuration with a real vision model en
 python -m hwap run --task reach --method direct --agent-config /path/to/agent.json --views ego --seeds 10 11 12 --output runs/visual_agent
 ```
 
-No real model endpoint is currently configured; the adapter has not been evaluated with a deployed VLM. LLM call/token counts and controller/planner costs are recorded separately where available.
+The repository also includes a local Codex vision bridge; its earlier smoke-test
+records are described in [CODEX_VISION_AGENT.md](CODEX_VISION_AGENT.md).
+An actual endpoint or local bridge must be explicitly configured for each new
+visual-model run. LLM call/token counts and controller/planner costs are
+recorded separately where available.
 
 ## SONIC provenance and scope
 
@@ -73,6 +81,11 @@ python -m hwap run --backend sonic --sonic-model-dir models/sonic_v1_1 --task re
 
 Do not promote SONIC to the default before standing/target tracking/replay tests pass in this project's robot and hand model.
 
+## Harness layer
+
+The proposal's full loop (world model, critic, local search, gaze, memory/skills, testing gate) is in
+`hwap/harness.py` and is configured by `configs/harness/*.json`; see [INFRASTRUCTURE.md](INFRASTRUCTURE.md).
+
 ## Next milestones
 
 1. Validate SONIC standing and dual-arm/torso tracking; then connect its lower-body motion planner. Keep Unitree+IK as the reproducible reference.
@@ -80,3 +93,22 @@ Do not promote SONIC to the default before standing/target tracking/replay tests
 3. Build a reliable grasp primitive and diversify reach/pick-place configurations; add simple obstructed viewpoints after success on the unobstructed tasks.
 4. Expand dataset collection, establish all three grouped splits and command-conditioned future robot/camera previews. Only then train/evaluate a learned video world model on the 4090; larger models can use the 48 GB server or A800.
 5. Add learned-world-model search, structured failure memory and reusable verified skills once the direct/Oracle comparison is stable.
+
+## Local starter scripts
+
+- `scripts/setup_env.sh`: isolated CPU simulation environment, optional SONIC,
+  TorchScript and video dependencies.
+- `scripts/check_env.py`: dependency report, model compilation, physics hold and
+  three-view RGB probe; diagnostics are isolated in a child process.
+- `scripts/run_sim.py`: recorded stand, walk and calibration reach demonstrations,
+  with an optional desktop viewer.
+- `scripts/run_experiment.py`: JSON experiment presets, direct/oracle runs,
+  aggregate metrics and replay verification.
+- `scripts/collect_data.py`: synchronized small random wrist rollouts and optional
+  grouped dataset export.
+- `scripts/download_sonic.py`: pinned downloads and size/SHA256 validation.
+
+Dataset windows now additionally preserve raw command chunks, offsets relative
+to the window, and future image timestamps. Achieved skeleton conditions remain
+explicitly labeled as measured; this does not supply a trained video world model
+or an inference-time future-pose generator.

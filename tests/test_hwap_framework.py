@@ -88,7 +88,7 @@ def test_episode_roundtrip_replays_physics_and_records_calibration(tmp_path):
         recorder.execute(hold(env,0.2))
         result=recorder.finish()
         assert result["frames"][0]["cameras"]["ego"]["width"]==64
-        assert set(env.observe(render=False)["robot"])=={"base_pose","pelvis_height","left_wrist","right_wrist"}
+        assert set(env.observe(render=False)["robot"])=={"base_pose","pelvis_height","left_wrist","right_wrist","head"}
     replay=replay_episode(tmp_path/"ep")
     assert replay["max_qpos_error"]<1e-9
 

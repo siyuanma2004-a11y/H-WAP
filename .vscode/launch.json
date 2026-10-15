@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "H-WAP: headless reach demo",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/run_sim.py",
+      "python": "${workspaceFolder}/.venv/bin/python",
+      "args": ["--demo", "reach", "--gl", "egl"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "H-WAP: desktop G1 viewer",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/run_sim.py",
+      "python": "${workspaceFolder}/.venv/bin/python",
+      "args": ["--demo", "reach", "--viewer", "--gl", "glfw"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    }
+  ]
+}

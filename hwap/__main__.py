@@ -94,6 +94,14 @@ def main():
     replay = sub.add_parser("replay");replay.add_argument("episode")
     replay.add_argument("--render",action="store_true")
     export = sub.add_parser("export");export.add_argument("runs");export.add_argument("output")
+    wm = sub.add_parser("export-wm", help="clip-level world-model dataset (frames, pose images, action vectors)")
+    wm.add_argument("runs");wm.add_argument("output")
+    wm.add_argument("--clip-frames",type=int,default=9);wm.add_argument("--stride",type=int,default=4)
+    wm.add_argument("--views",nargs="+");wm.add_argument("--splits")
+    wm.add_argument("--video",action="store_true");wm.add_argument("--exclude-failures",action="store_true")
+    wm.add_argument("--command-camera",choices=["recorded","history"],default="recorded")
+    harness = sub.add_parser("harness", help="run a schema_version 2 harness experiment config")
+    harness.add_argument("config");harness.add_argument("--output",required=True)
     video = sub.add_parser("video");video.add_argument("episode")
     video.add_argument("--view",default="ego");video.add_argument("--output")
     args = parser.parse_args()
@@ -101,6 +109,17 @@ def main():
         run(args)
     elif args.command == "replay":
         print(json.dumps(replay_episode(args.episode,args.render),indent=2))
+    elif args.command == "export-wm":
+        from .dataset import export_world_model_dataset
+        print(json.dumps(export_world_model_dataset(args.runs,args.output,clip_frames=args.clip_frames,stride=args.stride,
+            views=args.views,splits=args.splits,video=args.video,include_failures=not args.exclude_failures,
+            command_camera=args.command_camera),indent=2))
+    elif args.command == "harness":
+        from .runner import run_experiment
+        summary = run_experiment(args.config,args.output)
+        print(json.dumps({k:summary[k] for k in ("name","episodes","success_rate")},indent=2))
+        if any(r["run_error"] for r in summary["runs"]):
+            raise SystemExit(1)
     elif args.command == "video":
         from .video import export_video
         print(json.dumps(export_video(args.episode,args.view,args.output),indent=2))

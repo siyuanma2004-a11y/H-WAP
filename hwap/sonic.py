@@ -50,6 +50,8 @@ def relative_quaternion(parent,child):
 class SonicOnnxController(ChunkController):
     backend_name = "sonic_v1_1_onnx_standing"
     supports_head = True
+    supports_head_position = True
+    gaze_limits = None  # head is a SONIC torso reference, not waist-joint gaze
     supports_velocity = False
     supports_waist = False
 
@@ -136,7 +138,8 @@ class SonicOnnxController(ChunkController):
         for index,pose,delta in ((0,command.left_wrist,[.08,-.025,0]),(1,command.right_wrist,[.08,.025,0]),(2,command.head,[0,0,0])):
             if pose is not None:
                 q = pose.quaternion if pose.quaternion is not None else quaternions[index]
-                positions[index] = np.array(pose.position)+quaternion_matrix(q)@delta
+                if pose.position is not None:  # orientation-only head keeps its reference position
+                    positions[index] = np.array(pose.position)+quaternion_matrix(q)@delta
                 quaternions[index] = q
         R = quaternion_matrix(d.qpos[3:7])
         features[890:899] = ((positions-d.qpos[:3])@R).reshape(-1)

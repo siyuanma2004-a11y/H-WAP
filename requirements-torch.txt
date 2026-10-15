@@ -1,0 +1,2 @@
+# Optional comparison with the original TorchScript locomotion implementation.
+torch==2.7.1
